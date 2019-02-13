@@ -1,0 +1,23 @@
+--------------------------------------------------------------------------------
+ipconfig/renew
+
+--------------------------------------------------------------------------------
+docker load -i /shared_files/resources/nginx-php-fpm-dev_0.1.tar
+docker load -i /shared_files/resources/php-cli-dev_0.1.tar.tar
+docker load -i /shared_files/resources/redis-4.0.11.tar
+docker load -i /shared_files/resources/rabbitmq_3.7.7.tar
+
+--------------------------------------------------------------------------------
+/shared_files/resources/docker-compose-Linux-x86_64 -f /shared_files/shared_projects/export_service/docker/docker-compose.yml up -d
+/shared_files/resources/docker-compose-Linux-x86_64 -f /shared_files/shared_projects/export_service/docker/docker-compose.yml down
+
+--------------------------------------------------------------------------------
+docker exec -it docker_nginx-php-fpm_1 bash
+
+--------------------------------------------------------------------------------
+docker exec -it docker_redis_1 bash
+redis-cli -h 127.0.0.1 -p 6379 -a 123456
+
+--------------------------------------------------------------------------------
+docker logs docker_nginx-php-fpm_1
+docker logs docker_php-cli_1

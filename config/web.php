@@ -9,7 +9,7 @@ $config = [
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'components' => [
         'request' => [
@@ -24,7 +24,7 @@ $config = [
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            // 'errorAction' => 'site/error',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -53,6 +53,20 @@ $config = [
         */
     ],
     'params' => $params,
+];
+
+$config['params']['redis'] = [
+    // 'host' => '127.0.0.1',
+    'host' => 'redis-service',
+    'port' => 6379,
+    'password' => 123456,
+];
+$config['params']['rabbitmq'] = [
+    // 'host' => '127.0.0.1',
+    'host' => 'rabbitmq-service',
+    'port' => 5672,
+    'user' => 'guest',
+    'password' => 'guest'
 ];
 
 if (YII_ENV_DEV) {

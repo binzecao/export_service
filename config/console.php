@@ -10,7 +10,7 @@ $config = [
     'controllerNamespace' => 'app\commands',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
         '@tests' => '@app/tests',
     ],
     'components' => [
@@ -35,6 +35,20 @@ $config = [
         ],
     ],
     */
+];
+
+$config['params']['redis'] = [
+    // 'host' => '127.0.0.1',
+    'host' => 'redis-service',
+    'port' => 6379,
+    'password' => 123456,
+];
+$config['params']['rabbitmq'] = [
+    // 'host' => '127.0.0.1',
+    'host' => 'rabbitmq-service',
+    'port' => 5672,
+    'user' => 'guest',
+    'password' => 'guest'
 ];
 
 if (YII_ENV_DEV) {

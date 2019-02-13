@@ -1,0 +1,69 @@
+version: "3"
+services:
+  nginx-php-fpm:
+    image: nginx-php-fpm-dev:0.3
+    volumes:
+      - "/shared_files/shared_projects/export_service:/var/www/html:rw"
+      - "/shared_files/shared_projects/export_service/docker/nginx.conf:/etc/nginx/nginx.conf"
+      - "/shared_files/shared_projects/export_service/docker/php.ini:/usr/local/etc/php/php.ini"
+      - "/shared_files/shared_projects/export_service/docker/www.conf:/usr/local/etc/php-fpm.d/www.conf"
+      - "/container_data/nginx/log:/var/log/nginx"
+      - "/container_data/php-fpm/log:/usr/local/var/log"
+    environment:
+      - PROJECT_PATH=/var/www/html
+    networks:
+      dev-network:
+        aliases:
+          - "nginx-php-fpm-service"
+    ports:
+      - "80:80"
+
+  php-cli:
+    image: php:7.2.9-cli
+    volumes:
+      - "/shared_files/shared_projects/export_service:/var/www/html:rw"
+      - "/shared_files/shared_projects/export_service/docker/php.ini:/usr/local/etc/php/php.ini"
+      - "$PWD:/shared_files/shared_projects/export_service"
+    environment:
+      - PROJECT_PATH=/var/www/html
+    networks:
+      dev-network:
+        aliases:
+          - "php-cli-service"
+    command:
+#       - php /var/www/html/yii handle-redis-queue-tasks/index
+#       - php -version
+       - php /var/www/html/yii handle-rabbit-mq-queue-tasks/index
+#      - php yii handle-redis-queue-tasks/index & php yii handle-rabbit-mq-queue-tasks/index
+    
+  redis:
+    image: redis:4.0.11
+    volumes: 
+      - "/container_data/redis/data:/data"
+    networks:
+      dev-network:
+        aliases:
+          - "redis-service"
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass "123456"
+
+  rabbitmq:
+    image: rabbitmq:3.7.7
+    volumes:
+      - "/container_data/rabbitmq:/var/lib/rabbitmq"
+    networks:
+      dev-network:
+        aliases:
+          - "rabbitmq-service"
+    ports:
+      - "5672:5672"
+
+networks:
+  dev-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 172.30.0.0/16
